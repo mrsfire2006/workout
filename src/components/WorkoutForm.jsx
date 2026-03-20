@@ -15,7 +15,7 @@ const WorkoutForm = () => {
   const handleEdit = async () => {
     const newWorkout = { ...workout };
     if (!user) {
-      setError('must be login')
+      setError("must be login");
       return;
     }
     const res = await fetch(
@@ -25,7 +25,7 @@ const WorkoutForm = () => {
         body: JSON.stringify(newWorkout),
         headers: {
           "Content-Type": "application/json",
-          'Authorization': `Bearer ${user.token}`,
+          Authorization: `Bearer ${user.token}`,
         },
       },
     );
@@ -44,7 +44,7 @@ const WorkoutForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!user) {
-      setError('must be login')
+      setError("must be login");
       return;
     }
     const newWorkout = { ...workout };
@@ -53,7 +53,7 @@ const WorkoutForm = () => {
       body: JSON.stringify(newWorkout),
       headers: {
         "Content-Type": "application/json",
-        'Authorization': `Bearer ${user.token}`,
+        Authorization: `Bearer ${user.token}`,
       },
     });
     const json = await res.json();
@@ -135,7 +135,7 @@ const WorkoutForm = () => {
       </div>
       {error && (
         <div className="error">
-          {error.title || error.reps || error.load || error}
+          {error.title || error.reps || error.load || error.message}
         </div>
       )}
     </form>

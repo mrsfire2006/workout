@@ -38,7 +38,7 @@ const Signup = () => {
         </button>
         {error && (
           <div className="error">
-            {error.email || error.password || error.message || error}
+            {error.email || error.password || error.message}
           </div>
         )}
       </form>

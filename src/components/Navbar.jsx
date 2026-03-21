@@ -26,14 +26,40 @@ const Navbar = () => {
             style={{
               display: "flex",
               flexDirection: "row",
-              gap: "15px",
+              gap: "12px",
+              alignItems: "center",
+              flexWrap: "wrap",
             }}
           >
-            <span>{user.email}</span>
-            <Link to="/" onClick={handleLogout}>
+            <span
+              style={{
+                background: "rgba(26, 172, 131, 0.1)",
+                padding: "6px 12px",
+                borderRadius: "6px",
+                color: "var(--primary)",
+                fontWeight: "500",
+                fontSize: "0.9em",
+                whiteSpace: "nowrap",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                maxWidth: "150px",
+              }}
+            >
+              {user.email}
+            </span>
+            <Link to="/" onClick={handleLogout} style={{ margin: 0 }}>
               <Button
-                style={{ borderColor: "red", color: "red", fontWeight: "bold" }}
-                variant="outlined"
+                style={{
+                  borderColor: "var(--error)",
+                  color: "#fff",
+                  fontWeight: "700",
+                  padding: "6px 16px",
+                  background: "linear-gradient(135deg, var(--error), #c0392b)",
+                  textTransform: "none",
+                  fontSize: "0.9em",
+                  minWidth: "auto",
+                }}
+                variant="contained"
               >
                 Log out
               </Button>

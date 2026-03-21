@@ -1,4 +1,5 @@
 import { useWorkoutContext } from "../hooks/useWorkoutsContext";
+import { useFormContext } from "../hooks/useFormContext";
 import formatDistanceToNow from "date-fns/formatDistanceToNow";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -9,19 +10,20 @@ import {
 import { useAuthContext } from "../hooks/useAuthContext";
 const WorkoutDetails = ({ workout }) => {
   const { editWorkout, dispatch } = useWorkoutContext();
-  const{user} = useAuthContext();
+  const { dispatch: formDispatch } = useFormContext();
+  const { user } = useAuthContext();
   const handleCancel = () => {
     dispatch({ type: "CANCEL_EDIT_WORKOUT", payload: null });
+    formDispatch({ type: "DROP_MODAL" });
   };
   const handleDelete = async () => {
-    
     const response = await fetch(
       `${import.meta.env.VITE_API_URL}/workouts/${workout._id}`,
       {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
-          'Authorization': `Bearer ${user.token}`,
+          Authorization: `Bearer ${user.token}`,
         },
       },
     );
@@ -37,6 +39,7 @@ const WorkoutDetails = ({ workout }) => {
   };
   const handleEdit = () => {
     dispatch({ type: "SET_EDIT_WORKOUT", payload: workout });
+    formDispatch({ type: "SHOW_MODAL_EDIT", payload: workout });
   };
 
   return (
@@ -67,7 +70,7 @@ const WorkoutDetails = ({ workout }) => {
         style={{
           display: "flex",
           flexDirection: "column",
-          justifyContent: "space-evenly",
+          justifyContent: "space-around",
         }}
       >
         <FontAwesomeIcon

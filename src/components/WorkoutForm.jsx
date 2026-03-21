@@ -1,16 +1,35 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useWorkoutContext } from "../hooks/useWorkoutsContext";
+import { useFormContext } from "../hooks/useFormContext";
 import { useAuthContext } from "../hooks/useAuthContext";
 
 const WorkoutForm = () => {
   const { editWorkout, dispatch } = useWorkoutContext();
+  const {
+    workout: formWorkout,
+    showModal,
+    dispatch: formDispatch,
+  } = useFormContext();
   const { user } = useAuthContext();
   const [workout, setWorkout] = useState({
-    id: editWorkout ? editWorkout._id : "",
-    title: editWorkout ? editWorkout.title : "",
-    reps: editWorkout ? editWorkout.reps : 0,
-    load: editWorkout ? editWorkout.load : 0,
+    id: formWorkout ? formWorkout._id : "",
+    title: formWorkout ? formWorkout.title : "",
+    reps: formWorkout ? formWorkout.reps : 0,
+    load: formWorkout ? formWorkout.load : 0,
   });
+
+  useEffect(() => {
+    if (formWorkout) {
+      setWorkout({
+        id: formWorkout._id,
+        title: formWorkout.title,
+        reps: formWorkout.reps,
+        load: formWorkout.load,
+      });
+    } else {
+      setWorkout({ id: "", title: "", reps: 0, load: 0 });
+    }
+  }, [formWorkout]);
   const [error, setError] = useState(null);
   const handleEdit = async () => {
     const newWorkout = { ...workout };
@@ -37,6 +56,8 @@ const WorkoutForm = () => {
         type: "SHOW_NOTIFICATION",
         payload: { message: "Edit Success" },
       });
+      formDispatch({ type: "DROP_MODAL" });
+      dispatch({ type: "CANCEL_EDIT_WORKOUT", payload: null });
     } else {
       setError(json);
     }
@@ -69,8 +90,10 @@ const WorkoutForm = () => {
         type: "SHOW_NOTIFICATION",
         payload: { message: "Create Success" },
       });
+      formDispatch({ type: "DROP_MODAL" });
     }
   };
+  const isEdit = Boolean(formWorkout);
   return (
     <form className="create" onSubmit={handleSubmit}>
       <h3>Add a new Workout</h3>
@@ -117,16 +140,13 @@ const WorkoutForm = () => {
         }}
       />
       <div className="actions">
-        <button
-          disabled={editWorkout ? true : false}
-          style={{ opacity: editWorkout ? "0.8" : "1" }}
-        >
+        <button disabled={isEdit} style={{ opacity: isEdit ? "0.8" : "1" }}>
           Add Workout
         </button>
 
         <button
-          disabled={editWorkout ? false : true}
-          style={{ opacity: editWorkout ? "1" : "0" }}
+          disabled={!isEdit}
+          style={{ opacity: isEdit ? "1" : "0" }}
           type="button"
           onClick={handleEdit}
         >
